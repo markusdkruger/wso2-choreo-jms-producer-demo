@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/jms-producer" name="JMSProducer" version="1.0.0" version-type="url" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="POST" url-mapping="/jsonPayload">
+        <inSequence>
+            <log level="custom">
+                <property name="JMSProducerSample Message" value="##### REST Request Received #####"/>
+                <property expression="json-eval($)" name="Payload"/>
+            </log>
+            <property name="OUT_ONLY" scope="default" type="STRING" value="true"/>
+            <property name="FORCE_SC_ACCEPTED" scope="axis2" type="STRING" value="false"/>
+            <call>
+                <endpoint>
+                    <address uri="jms:/q.RMB.Demo.1?transport.jms.ConnectionFactoryJNDIName=QueueConnectionFactory&amp;java.naming.factory.initial=org.apache.activemq.jndi.ActiveMQInitialContextFactory&amp;java.naming.provider.url=tcp://markusdemo.ddns.net:61616&amp;transport.jms.DestinationType=queue">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </address>
+                </endpoint>
+            </call>
+            <log level="custom">
+                <property name="JMSProducerSample Message" value="##### JMS Message Produced #####"/>
+            </log>
+            <payloadFactory media-type="json">
+                <format>
+{
+	"message" : "Message has been produced to JMS Queue"
+}
+                </format>
+                <args/>
+            </payloadFactory>
+            <property name="HTTP_SC" scope="axis2" type="STRING" value="200"/>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence>
+            <log category="ERROR" level="custom">
+                <property name="JMSProducerSample Message" value="##### JMS Message Producer Failed #####"/>
+            </log>
+            <payloadFactory media-type="json">
+                <format>
+{
+	"message" : "Failure - Message has not been produced to JMS Queue"
+}
+                </format>
+                <args/>
+            </payloadFactory>
+            <property name="HTTP_SC" scope="axis2" type="STRING" value="500"/>
+            <respond/>
+        </faultSequence>
+    </resource>
+</api>
