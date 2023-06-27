@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<api context="/jms-producer" name="JMSProducer" version="1.0.0" version-type="url" xmlns="http://ws.apache.org/ns/synapse">
+<api context="/jms-producer" name="JMSProducer" xmlns="http://ws.apache.org/ns/synapse">
     <resource methods="POST" url-mapping="/jsonPayload">
         <inSequence>
             <log level="custom">
