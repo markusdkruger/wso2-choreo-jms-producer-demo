@@ -74,7 +74,6 @@
       </activation>
       <build />
       <modules>
-        <module>RMBJmsProducerDemoDocker</module>
         <module>RMBJmsProducerDemoESB</module>
         <module>RMBJmsProducerDemoDeployment</module>
       </modules>
